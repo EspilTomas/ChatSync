@@ -1,0 +1,167 @@
+<!-- Client-side code -->
+<!-- Save as public/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>WebSocket Chat</title>
+</head>
+<body>
+    <h1>WebSocket Chat</h1>
+    
+    <div id="status">Connecting...</div>
+    
+    <div id="chat-container">
+        <div id="messages"></div>
+        
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Type a message..." disabled>
+            <button id="send-button" disabled>Send</button>
+        </div>
+    </div>
+    
+    <script>
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const statusElement = document.getElementById('status');
+        
+        let socket;
+        let userId;
+        
+        // Function to create and establish WebSocket connection
+        function connectWebSocket() {
+            // Get the host and port from the current URL
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}`;
+            
+            // Create WebSocket connection
+            socket = new WebSocket(wsUrl);
+            
+            // Connection opened
+            socket.addEventListener('open', (event) => {
+                statusElement.textContent = 'Connected';
+                statusElement.style.color = 'green';
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            });
+            
+            // Listen for messages
+            socket.addEventListener('message', (event) => {
+                const message = JSON.parse(event.data);
+                
+                switch (message.type) {
+                    case 'welcome':
+                        userId = message.userId;
+                        addNotification(message.message);
+                        break;
+                        
+                    case 'message':
+                        addChatMessage(message);
+                        break;
+                        
+                    case 'notification':
+                        addNotification(message.message);
+                        break;
+                }
+            });
+            
+            // Connection closed
+            socket.addEventListener('close', (event) => {
+                statusElement.textContent = 'Disconnected. Attempting to reconnect...';
+                statusElement.style.color = 'red';
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+                
+                // Try to reconnect after a delay
+                setTimeout(connectWebSocket, 3000);
+            });
+            
+            // Connection error
+            socket.addEventListener('error', (event) => {
+                console.error('WebSocket error:', event);
+                statusElement.textContent = 'Connection error';
+                statusElement.style.color = 'red';
+            });
+        }
+        
+        // Function to add chat message to the UI
+        function addChatMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            
+            if (message.userId === userId) {
+                messageElement.classList.add('user-message');
+            }
+            
+            const header = document.createElement('div');
+            header.className = 'message-header';
+            
+            const usernameSpan = document.createElement('span');
+            usernameSpan.textContent = message.userId;
+            usernameSpan.style.color = message.color;
+            
+            const timestampSpan = document.createElement('span');
+            const date = new Date(message.timestamp);
+            timestampSpan.textContent = date.toLocaleTimeString();
+            
+            header.appendChild(usernameSpan);
+            header.appendChild(timestampSpan);
+            
+            const textElement = document.createElement('div');
+            textElement.textContent = message.text;
+            
+            messageElement.appendChild(header);
+            messageElement.appendChild(textElement);
+            
+            messagesContainer.appendChild(messageElement);
+            scrollToBottom();
+        }
+        
+        // Function to add notification message
+        function addNotification(text) {
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification';
+            notificationElement.textContent = text;
+            messagesContainer.appendChild(notificationElement);
+            scrollToBottom();
+        }
+        
+        // Function to scroll chat to bottom
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Send message when button is clicked
+        sendButton.addEventListener('click', sendMessage);
+        
+        // Send message when Enter key is pressed
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Function to send message
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            
+            if (text && socket.readyState === WebSocket.OPEN) {
+                // Send message to server
+                socket.send(JSON.stringify({ text }));
+                
+                // Clear input field
+                messageInput.value = '';
+                messageInput.focus();
+            }
+        }
+        
+        // Connect to WebSocket server
+        connectWebSocket();
+    </script>
+</body>
+</html>
