@@ -1,6 +1,6 @@
-# Chat en Tiempo Real con WebSockets
+# Chat en Tiempo Real con WebSockets e IA de OpenAI
 
-Aplicación de chat en tiempo real con WebSocket que permite la comunicación instantánea entre usuarios, salas de chat personalizadas y estado de conexión en vivo.
+Aplicación de chat en tiempo real con WebSocket que permite la comunicación instantánea entre usuarios, salas de chat personalizadas, estado de conexión en vivo e integración con OpenAI.
 
 ## Características
 
@@ -11,6 +11,7 @@ Aplicación de chat en tiempo real con WebSocket que permite la comunicación in
 - ⌨️ Indicador de escritura
 - 👥 Lista de usuarios en línea
 - 📱 Diseño responsive
+- 🤖 Asistente IA integrado con comando !gpt
 
 ## Requisitos
 
@@ -40,7 +41,9 @@ npm start
 ├── package.json       # Configuración del proyecto
 ├── public/            # Archivos estáticos
 │   ├── index.html     # Interfaz de usuario
-│   └── style.css      # Estilos CSS
+│   ├── style.css      # Estilos CSS
+│   └── js/
+│       └── chat-client.js  # Lógica del cliente
 ```
 
 ## Cómo usar
@@ -62,3 +65,6 @@ npm start
 - Añadir nuevas funcionalidades en `server.js`
 - Personalizar la interfaz de usuario en `public/index.html`
 
+## Licencia
+
+Este proyecto está bajo la Licencia MIT.
