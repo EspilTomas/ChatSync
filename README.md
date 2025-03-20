@@ -62,6 +62,3 @@ npm start
 - Añadir nuevas funcionalidades en `server.js`
 - Personalizar la interfaz de usuario en `public/index.html`
 
-## Licencia
-
-Este proyecto está bajo la Licencia MIT.
