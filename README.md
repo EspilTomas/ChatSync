@@ -64,7 +64,3 @@ npm start
 - Puedes modificar los estilos en `public/style.css`
 - Añadir nuevas funcionalidades en `server.js`
 - Personalizar la interfaz de usuario en `public/index.html`
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT.
