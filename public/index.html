@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.15.0/index.js" type="module"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.15.0/css/emoji-picker.css">
     <title>Chat en Tiempo Real</title>
 </head>
 <body>
@@ -11,7 +13,10 @@
         <div class="sidebar">
             <!-- User profile section -->
             <div class="user-profile">
-                <div id="status" class="status">Conectando...</div>
+                <div class="top-controls">
+                    <div id="status" class="status">Conectando...</div>
+                    <button id="theme-toggle" class="theme-toggle" title="Cambiar tema">🌙</button>
+                </div>
                 <div class="username-container">
                     <input type="text" id="username-input" placeholder="Nombre de usuario" disabled>
                     <button id="change-username-btn" disabled>Cambiar</button>
@@ -54,8 +59,12 @@
                 <div id="typing-indicator" class="typing-indicator"></div>
                 
                 <div id="input-container" class="input-container">
+                    <button id="emoji-button" class="emoji-button" title="Insertar emoji">😊</button>
                     <textarea id="message-input" placeholder="Escribe un mensaje..." disabled></textarea>
                     <button id="send-button" disabled>Enviar</button>
+                    <div id="emoji-wrapper">
+                        <emoji-picker id="emoji-picker" class="hidden"></emoji-picker>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,5 +72,6 @@
     
     <!-- Script externo -->
     <script src="js/chat-client.js"></script>
+    <script src="js/emojis.js"></script>
 </body>
 </html>
