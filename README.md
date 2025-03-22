@@ -43,7 +43,9 @@ npm start
 │   ├── index.html     # Interfaz de usuario
 │   ├── style.css      # Estilos CSS
 │   └── js/
-│       └── chat-client.js  # Lógica del cliente
+│       ├── chat-client.js  # Lógica del cliente
+|       ├── emojis.js  # Lógica de la seleccion de emojis
+
 ```
 
 ## Cómo usar
